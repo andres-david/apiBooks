@@ -3,17 +3,17 @@ const router = Router();
 const booksCtrl = require("../controller/books.controller");
 
 
-// router.get( "/", notasCtrl.getStart );
+router.get( "/l", booksCtrl.getStart );
 
-// router.get( "/notas/:id", notasCtrl.getNotas);
+router.get( "/libros/:id", booksCtrl.getBooks);
 
-// router.get( "/notas", notasCtrl.getNotas);
+router.get( "/libros", booksCtrl.getBooks);
 
-// router.post( "/notas", notasCtrl.postNotas);
+router.post( "/libros", booksCtrl.postBooks);
 
-// router.put( "/notas", notasCtrl.putNotas); 
+router.put( "/libros", booksCtrl.putBooks); 
 
-// router.delete( "/notas", notasCtrl.deleteNota);
+router.delete( "/libros", booksCtrl.deleteBooks);
 
 
 module.exports = router;

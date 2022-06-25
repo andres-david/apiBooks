@@ -27,7 +27,7 @@ function postUser( request, response ){
                 response.send(String(result.insertId));
             }
             else{
-                response.send(result);
+                response.send("-1");
             }
         }
     })
@@ -41,8 +41,6 @@ function postLogin( request, response ){
     let correo = request.body.correo;
     let password = request.body.password;
 
-    // sql = 'SELECT id_usuario, nombre, apellidos, correo, foto FROM usuario WHERE correo=' + correo + ' AND password=' + password
-
     sql = "SELECT id_usuario, nombre, apellidos, correo, foto FROM usuario WHERE (correo= '"+correo+"'AND password= '"+password+"')"
 
     console.log(sql);
@@ -53,20 +51,20 @@ function postLogin( request, response ){
         else{
             
             if(result.length > 0){
-                let json = {
+                let json = [{
                     error: false,
                     message: "Datos correctos",
                     result: result
-                }
+                }];
                 response.send(json)
             }
             else{
-                let json = {
+                let arr = [{
                     error: true,
                     message: "Datos incorrectos",
                     result: result
-                }
-                response.send(json)
+                }];
+                response.send(arr)
             }
 
         }

@@ -7,17 +7,16 @@ function getStart( request, response ){
     next();
 }
 
-function getNotas( request, response ){
+function getBooks( request, response ){
 
     let sql;
     
-    if( request.params.id ){
-        sql = "SELECT * FROM marks WHERE id_mark=" + request.params.id;
+    if( request.query.nombre ){
+        sql = "SELECT id_libro, titulo, tipo, autor, precio, libro.foto FROM appbooks.libro JOIN usuario ON (libro.id_usuario = usuario.id_usuario) WHERE nombre='" + request.query.nombre +"'";
     }
-    else{
-        sql = "SELECT * FROM marks";
+    else if(request.params.id){
+        sql = "SELECT id_libro, id_usuario, titulo, tipo, autor, precio, libro.foto FROM appbooks.libro WHERE id_libro='" + request.params.id +"'";
     }
-
     connection.query(sql, (err, result) => {
         if(err){
             console.log(err);
@@ -29,13 +28,17 @@ function getNotas( request, response ){
 
 }
 
-function postNotas( request, response ){
+function postBooks( request, response ){
 
     console.log(request.body);
 
-    let sql = "INSERT INTO marks (date, mark) " + 
-                "VALUES ('" + request.body.date + "', '" +
-                                request.body.mark + "')";
+    let sql = "INSERT INTO libro (id_usuario, titulo, tipo, autor, precio, foto)" + 
+    "VALUES ('" + request.body.id_usuario + "', '" +
+                    request.body.titulo + "', '" +
+                    request.body.tipo + "', '" +
+                    request.body.autor + "', '" +
+                    request.body.precio + "', '" +
+                    request.body.foto + "')"; 
 
     console.log(sql);
     connection.query(sql, (err, result) => {
@@ -55,17 +58,22 @@ function postNotas( request, response ){
 
 }
 
-function putNotas( request, response ){
+function putBooks( request, response ){
 
     console.log(request.body);
 
-    let date = request.body.date;
-    let mark = request.body.mark;
-    let id_mark = request.body.id_mark;
-    let params = [date, mark, id_mark];
+    let id_usuario = request.body.id_usuario;
+    let id_libro = request.body.id_libro;
+    let titulo   = request.body.titulo;
+    let tipo     = request.body.tipo;
+    let autor    = request.body.autor;
+    let precio   = request.body.precio;
+    let foto     = request.body.foto;
+    let params   = [id_usuario, titulo, tipo, autor, precio, foto, id_libro];
 
-    let sql = "UPDATE marks SET date = COALESCE(?, date) , " + 
-               "mark = COALESCE(?, mark)  WHERE id_mark = ?";
+    let sql = "UPDATE libro SET id_usuario = COALESCE(?, id_usuario) , " + 
+               "titulo = COALESCE(?, titulo), " + "tipo = COALESCE(?, tipo), " + "autor = COALESCE(?, autor), " +
+               "precio = COALESCE(?, precio), " + "foto = COALESCE(?, foto) WHERE id_libro = ?";
     console.log(sql); 
     connection.query(sql, params,function (err, result) 
     {
@@ -79,12 +87,12 @@ function putNotas( request, response ){
 
 }
 
-function deleteNota(request, response){
+function deleteBooks(request, response){
 
-    let id = request.body.id_mark;
+    let id = request.body.id_libro;
     params = [id];
 
-    let dele = `DELETE FROM marks WHERE id_mark=?`;
+    let dele = `DELETE FROM libro WHERE id_libro=?`;
 
     connection.query(dele, params, (err, result) => {
         if(err){
@@ -98,4 +106,4 @@ function deleteNota(request, response){
 }
 
 
-module.exports = {getStart, getNotas, postNotas, putNotas, deleteNota};
+module.exports = {getStart, getBooks, postBooks, putBooks, deleteBooks};

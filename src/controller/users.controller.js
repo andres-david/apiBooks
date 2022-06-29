@@ -51,19 +51,19 @@ function postLogin( request, response ){
         else{
             
             if(result.length > 0){
-                let json = [{
+                let json = {
                     error: false,
                     message: "Datos correctos",
                     result: result
-                }];
+                };
                 response.send(json)
             }
             else{
-                let arr = [{
+                let arr = {
                     error: true,
                     message: "Datos incorrectos",
                     result: result
-                }];
+                };
                 response.send(arr)
             }
 
